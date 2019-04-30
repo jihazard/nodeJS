@@ -10,6 +10,7 @@ app.listen(3000,function(){
 app.use(express.static(`public`))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
+app.set(`view engine`, `ejs`)
 
 //URL루트 설정하기
 app.get('/',function(req,res){
@@ -26,9 +27,9 @@ app.get('/email',function(req,res){
 
 
 app.post('/email_post',function(req,res){
-
     console.log(req.body.email)
-   res.send("post response" )
+    res.render(`email.ejs`,{'email' : req.body.email})
+
 })
 
 

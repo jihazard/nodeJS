@@ -118,3 +118,22 @@ app.post('/email_post',function(req,res){
      )}
      ~~~
 
+
+### View engine
+ * 뷰엔진을 이용한 응답 처리 
+ * 뷰엔진 ejs 설치 및 세팅
+    1. 설치 : npm install ejs --save
+    2. 세팅 
+        - 1 최상위에 views 폴더를 생성 하고 email.ejs파일을 생성한다.
+        - 2 app.js 세팅 후 서버 실행 
+    ~~~
+    app.set(`view engine`, `ejs`) //view enging  ejs 선언
+
+    app.post('/email_post',function(req,res){
+     res.render(`email.ejs`,{'email' : req.body.email}) 
+     //사용할 파일은 email.ejs 전송할오브젝트는 email : req.body.email
+
+    })
+    ~~~
+       
+    
