@@ -7,7 +7,7 @@
 * 종료는 ctrl + c 로 종료한다.
 * 자동으로 파일의 변화를 감지하는 방법 npm install nodemon --global
 
-~~~
+~~~ javascript
 var express = require('express')
 var app = express()
 
@@ -21,7 +21,7 @@ app.listen(3000,function(){
 
 ### URL Routing 처리
 * URL 루트에 문자열 전송
-~~~
+~~~ javascript
 //URL루트 설정하기
 app.get('/',function(req,res){
     res.send("hi !!!!!! first app")
@@ -33,7 +33,7 @@ app.get('/',function(req,res){
    1. public 폴더 생성 후 main.html파일 생성
    2.  res.sendFile()에 __dirname + 루트 + 파일명 으로 연동할 파일 위치 정의
 
-~~~
+~~~ javascript
 var express = require('express')
 var app = express()
 
@@ -54,7 +54,7 @@ app.get('/',function(req,res){
 
  2. app.use(express.static(`public`)) 명령어로 public 폴더를 static 으로 지정해줄수있음
 
- ~~~
+ ~~~ javascript
  var express = require('express')
 var app = express()
 
@@ -91,7 +91,7 @@ app.get('/',function(req,res){
  ~~~
 
  3. post 생성
-~~~
+~~~ javascript
 app.post('/email_post',function(req,res){
     console.log(req.body.email)
    res.send("post response" )
@@ -103,7 +103,7 @@ app.post('/email_post',function(req,res){
 5. body-parser 설치 및 적용 방법
    1. npm install body-parser --save
    2. app.js 파일에 설정파일 추가.
-     ~~~
+     ~~~ javascript
      var bodyParser = require(`body-parser`) //모듈 정의
 
      app.use(bodyParser.json())
@@ -111,7 +111,7 @@ app.post('/email_post',function(req,res){
      ~~~
 
      3. 적용방법
-     ~~~
+     ~~~ javascript
      app.post('/email_post',function(req,res){
         console.log(req.body.email) // 입력 시 받은 eamil주소 출력
         res.send("post response" )
@@ -126,7 +126,7 @@ app.post('/email_post',function(req,res){
     2. 세팅 
         - 1 최상위에 views 폴더를 생성 하고 email.ejs파일을 생성한다.
         - 2 app.js 세팅 후 서버 실행 
-    ~~~
+    ~~~ javascript
     app.set(`view engine`, `ejs`) //view enging  ejs 선언
 
     app.post('/email_post',function(req,res){
@@ -136,4 +136,35 @@ app.post('/email_post',function(req,res){
     })
     ~~~
        
+ ### ajax 처리하기
+ * 요청하기 fetch
+ ~~~ javascript
+         document.querySelector(".ajaxsend").addEventListener("click",function(){
+            const input =document.querySelector("input");
+            const val = input.value;
+            let data = {"email":val}
+            data = JSON.stringify(data)
+
+            fetch("http://127.0.0.1:3000/ajax_send_email",{
+                method :"POST",
+                headers: {"Content-Type": "application/json"},
+                body : data
+            }).then(res => res.json())
+            .then(function(data){
+                console.log(data)
+                document.querySelector(".result").innerText=data.email
+            })
+
+ ~~~
+
+ * 처리하기 
+
+ ~~~ javascript
+ app.post('/ajax_send_email',function(req,res){
+    console.log(req.body.email)
+    var responseData = {"result" : "ok","email":req.body.email}
+    res.json(responseData)
     
+})
+ 
+ ~~~
