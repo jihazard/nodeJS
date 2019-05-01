@@ -252,3 +252,44 @@ Access-Control-Allow-Origin
         })
     ~~~
 
+# router 모듈화
+  * 세팅하고 설정하기 
+    1. 세팅 하기
+        * router 폴더 생성 후 /main 라우터를 처리할 main.js 파일 생성
+        ~~~javascript
+
+                var express = require('express')
+                var app = express()
+                var router = express.Router();  //라우터 설정
+
+                var path = require(`path`);  //경로 설정을 위한 패스 호출
+
+
+                router.get('/',function(req,res){ //app이 아닌 router로 
+                    console.log("모듈화 페이지접속")
+                    //path.join을 이용해 쉽게 결과 페이지 전달
+                    res.sendFile(path.join(__dirname,"../public/main.html"))
+                })
+
+                //외부에서 main.js 를 이용할 수 있도록 module.export = router 선언
+                module.exports = router
+
+        ~~~
+
+        * app.js에서 위에서 설정한 main.js 사용하기
+        ~~~javascript
+        //라우터 파일을 main 변수에 선언  .
+        var main = require('./router/main')
+
+        // /main router 를 이용할 경우 main 에 정의된  main.js를 이용하겠다고 선언
+        app.use("/main",main)
+
+        //   app.js 에서 /main url 을 처리하던 부분 삭제 
+       /* app.get('/main',function(req,res){
+            console.log("모듈화 페이지접속")
+            res.sendFile(path.join(__dirname,"../public/main.html"))
+        })*/
+
+        ~~~
+
+        

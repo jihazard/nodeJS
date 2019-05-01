@@ -2,6 +2,7 @@ var express = require('express')
 var app = express()
 var bodyParser = require(`body-parser`)
 var cors = require(`cors`)
+var main = require('./router/main')
 
 var mysql = require(`mysql`)
 var connection = mysql.createConnection({
@@ -26,14 +27,10 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.set(`view engine`, `ejs`)
 app.use(cors())
 
-//URL루트 설정하기
-app.get('/',function(req,res){
-        res.sendFile(__dirname+"/public/main.html")
-})
+app.use("/main",main)
 
-app.get('/main',function(req,res){
-    res.sendFile(__dirname+"/public/main.html")
-})
+//URL루트 설정하기
+
 
 app.get('/email',function(req,res){
     res.sendFile(__dirname+"/public/form.html")
