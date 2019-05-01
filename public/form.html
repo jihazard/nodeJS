@@ -7,7 +7,7 @@
     <title>form</title>
 </head>
 <body>
-    <form action="/email_post" method="post">
+    <form action="/email/post" method="post">
         email : <input type="text" name="email">
         <input type="submit">
     </form>
@@ -22,7 +22,7 @@
             let data = {"email":val}
             data = JSON.stringify(data)
 
-            fetch("http://127.0.0.1:3000/ajax_send_email",{
+            fetch("http://127.0.0.1:3000/email/ajax",{
                 method :"POST",
                 headers: {"Content-Type": "application/json"},
                 body : data
@@ -32,9 +32,12 @@
                 if(data.result!=="ok")   emailoutput.innerText="email not found"
                 else{
                     var result = data.vo
+                    var name =""
                     result.forEach(function(data){
                         console.log("--------" + data.name)
+                        name += data.name +"//";
                     });
+                    emailoutput.innerText= name
                 } //emailoutput.innerText=data.vo.email
             })
 
