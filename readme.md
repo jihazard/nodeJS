@@ -166,5 +166,89 @@ app.post('/email_post',function(req,res){
     res.json(responseData)
     
 })
- 
  ~~~
+
+
+# node JS 에서 CROS 추가하기 
+* http://guswnsxodlf.github.io/enable-CORS-on-express 참조
+
+  * cros 해결을 위한 cors 설치 및 세팅
+        1. 설치 npm install cors --save
+        2. 세팅
+       ~~~javascript 
+        var cors = require('cors');
+         //CORS 설정
+        app.use(cors());
+        
+CORS란 Cross Origin Resource Sharing의 약자로, 현재 도메인과 다른 도메인으로 리소스가 요청될 경우를 말한다. 예를 들어, 도메인 http://A.com 에서 읽어온 HTML페이지에서 다른 도메인 http://B.com/image.jpg를 요청하는 경우를 말한다. 이런 경우에 해당 리소스는 cross-origin HTTP 요청에 의해 요청된다. 보안 상의 이유로, 브라우저는 CORS를 제한하고 있다.
+
+하지만 SPA(Single Page Application)의 경우에는, RESTful API를 기반으로 비동기 네트워크 통신을 하기 때문에 API 서버와 웹 페이지 서버가 다를 수 있다. 이런 경우에 API 서버로 요청을 할 시에 CORS 제한이 걸리게 된다.
+
+Access-Control-Allow-Origin
+이를 해결하기 위해서 가장 간단한 방법은, 서버(API 서버)의 응답 헤더를 변경해주는 것이다. 서버의 헤더 중에는 Access-Control-Allow-Origin라는 프로퍼티가 있는데, CORS를 허용해 줄 도메인을 입력하는 곳이다. 모든 곳에서 CORS를 허용하기 위해서는 모두를 의미하는 *를 입력하면 된다.
+
+
+    
+
+    
+
+ # mysql 연동하기
+  * mysql 설치  
+        1.  npm install mysql --save
+  * mysql 세팅 및 테이블 접근 방법
+       
+       ~~~javascript
+            var mysql = require(`mysql`)
+            var connection = mysql.createConnection({
+                host:"localhost",
+                port :3306,
+                user : "hyb",
+                password:"hyb01",
+                database:"com"
+         })
+            connection.connect()
+       ~~~
+
+ * mysql에 쿼리 날리고 값 받아오기
+    1. 사전준비 
+        테이블  : user
+        칼럼 : name,email,pw   
+
+    2. 쿼리  db로 날리고 object에 담기
+    ~~~javascript
+    app.post('/ajax_send_email',function(req,res){
+   var email = req.body.email;
+   var responseData= {}
+   var query = connection.query(`select * from user where email = '${email}'` ,function(err,rows){
+        if(err) throw err
+        if(rows[0]){
+            responseData.result ="ok"
+            responseData.vo=rows[0]
+        }else {
+            responseData.result ="none"
+            responseData.vo="none"
+        }
+        res.json(responseData)
+         })
+    })
+    ~~~
+
+    3. list형태로 받아오기
+    ~~~javascript
+        app.post('/ajax_send_email',function(req,res){
+        var email = req.body.email;
+        var responseData= {}
+        var query = connection.query(`select * from user` ,function(err,rows){
+                if(err) throw err
+                if(rows){
+                    responseData.result ="ok"
+                    responseData.vo=rows
+                }else {
+                    responseData.result ="none"
+                    responseData.vo="none"
+                }
+                res.json(responseData)
+            })
+        })
+    ~~~
+

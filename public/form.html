@@ -18,20 +18,24 @@
         document.querySelector(".ajaxsend").addEventListener("click",function(){
             const input =document.querySelector("input");
             const val = input.value;
+            const emailoutput = document.querySelector(".result");
             let data = {"email":val}
             data = JSON.stringify(data)
 
-            const reqHeader = new Headers({
-            "Content-Type": "application/json",
-            });
             fetch("http://127.0.0.1:3000/ajax_send_email",{
                 method :"POST",
-                headers: reqHeader ,
+                headers: {"Content-Type": "application/json"},
                 body : data
             }).then(res => res.json())
             .then(function(data){
                 console.log(data)
-                document.querySelector(".result").innerText=data.email
+                if(data.result!=="ok")   emailoutput.innerText="email not found"
+                else{
+                    var result = data.vo
+                    result.forEach(function(data){
+                        console.log("--------" + data.name)
+                    });
+                } //emailoutput.innerText=data.vo.email
             })
 
           //  sendAjax("http://127.0.0.1:3000/ajax_send_email",val)
