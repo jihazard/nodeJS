@@ -13,4 +13,8 @@ router.use("/email",email)
 router.use("/join",join)
 
 
+router.get("/",function(req,res){
+    res.render("join.ejs")
+})
+
 module.exports=router
