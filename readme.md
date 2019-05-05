@@ -292,4 +292,12 @@ Access-Control-Allow-Origin
 
         ~~~
 
+
+# 세션 처리를 위환 PASSPORT 사용환경 설정
+
+  * 모듈설치하기
+        1. npm install passport passport-local express-session connect-flash
+         --save-dev
+        
+        2. 설치한 모듈 require 시키기
         
