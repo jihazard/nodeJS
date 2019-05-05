@@ -8,11 +8,13 @@ var email = require('./email')
 var join = require('./join')
 
 var login = require('./login')
+var logout = require('./logout')
 
 router.use(main)
 router.use("/email",email)
 router.use("/join",join)
 router.use("/login",login)
+router.use("/logout",logout)
 
 router.get("/",function(req,res){
     res.render("join.ejs")

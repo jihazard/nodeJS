@@ -411,3 +411,13 @@ router.post("/",function(req,res,next){
     }) (req,res,next);
 })
 ~~~
+
+* 로그 아웃 처리 하기 
+~~~node
+
+router.get("/",function(req,res){
+    req.logout()
+    res.redirect("/")
+})
+
+~~~
