@@ -27,7 +27,16 @@ router.get('/',function(req,res){
     res.render("join.ejs" ,{"message":msg})
 })
 
- //passport.serialize
+ passport.serializeUser(function(user,done){
+     console.log( 'passport session save : ' , user.email)
+     done(null,user.email)
+ })
+
+ passport.deserializeUser(function(email,done){
+    console.log( 'passport session deseirlaize : ' , email)
+    done(null,email)
+
+ })
 
  passport.use('local-join' , new LocalStrategy({
      usernameField : 'email',
@@ -47,7 +56,7 @@ router.get('/',function(req,res){
             var sql ={email : email,pw :pw}
             var query = connection.query(`insert into user set ? `,sql,function(err,rows){
                 if(err) throw err
-                return done(null, {'email':email ,'id': rows.insertId})
+                return done(null, {'email':email ,'id': rows.insertId})  //콜백에서 done 처리하려면 passport.serializeUser(function()) 정의해야함
             })
          }
      })
