@@ -21,18 +21,36 @@ connection.connect()
 
 router.get('/',function(req,res){
     //res.sendFile(path.join(__dirname,"../public/join.html"))
-    res.render("join.ejs")
+    var msg ; 
+    var errMsg = req.flash('error')
+    if(errMsg) msg = errMsg
+    res.render("join.ejs" ,{"message":msg})
 })
 
+ //passport.serialize
 
  passport.use('local-join' , new LocalStrategy({
      usernameField : 'email',
      passwordField : 'pw',
      passReqToCallback:true 
- }, function(req,email,pw){
+ }, function(req,email,pw,done){
      console.log('local-join callbakc called' + req)
      console.log(email)
      console.log(pw)
+
+     var query = connection.query(`select * from user where email = ? `, [email] ,function(err,rows){
+         if(err) return done(err)
+         if(rows.length) {
+            console.log('existed user')
+            return done(null,false, {message : 'your email is alread used'})  //flash 로 가능함
+         }else{
+            var sql ={email : email,pw :pw}
+            var query = connection.query(`insert into user set ? `,sql,function(err,rows){
+                if(err) throw err
+                return done(null, {'email':email ,'id': rows.insertId})
+            })
+         }
+     })
  }
  ));
 
