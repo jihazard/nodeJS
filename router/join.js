@@ -3,7 +3,6 @@ var app = express()
 var router = express.Router();
 
 var path = require(`path`);
-
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy;
 
@@ -31,11 +30,19 @@ router.get('/',function(req,res){
      passwordField : 'pw',
      passReqToCallback:true 
  }, function(req,email,pw){
-     console.log('local-join callbakc called')
+     console.log('local-join callbakc called' + req)
+     console.log(email)
+     console.log(pw)
  }
  ));
 
-
+ router.post("/", passport.authenticate('local-join',{
+    successRedirect : '/',
+    failureRedirect : '/join',
+    failureFlash:true
+}),function(req,res){
+    console.log("---------passport")
+})
 
 // router.post('/create',function(req,res){
 

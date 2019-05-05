@@ -3,7 +3,7 @@ var app = express()
 var bodyParser = require(`body-parser`)
 var cors = require(`cors`)
 var passport = require('passport')
-var LocalStrategy = require('passport-local').Strategy;
+var LocalStrategy  = require('passport-local').Strategy;
 var session = require('express-session')
 var flash = require('connect-flash')
 var router = require("./router/index")
@@ -24,6 +24,10 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
+
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(flash())
 
 app.use(router)
 //URL루트 설정하기

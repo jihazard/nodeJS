@@ -322,7 +322,19 @@ Access-Control-Allow-Origin
      passReqToCallback:true 
  }, function(req,email,pw){
      console.log('local-join callbakc called')
+    //DB에서 인증 처리가 이루어져야 하는 부분
  }
  ));
+
+ //패스포트 ROUTER 세팅
+  router.post("/", passport.authenticate('local-join',{
+    successRedirect : '/',
+    failureRedirect : '/join',
+    failureFlash:true
+}),function(req,res){
+    console.log("---------passport")
+    //완료 처리가 이루어지는 부분
+})
+
 
 ~~~
