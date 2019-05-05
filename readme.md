@@ -296,8 +296,33 @@ Access-Control-Allow-Origin
 # 세션 처리를 위환 PASSPORT 사용환경 설정
 
   * 모듈설치하기
-        1. npm install passport passport-local express-session connect-flash
-         --save-dev
-        
+        1. npm install passport passport-local express-session connect-flash --save-dev
         2. 설치한 모듈 require 시키기
         
+        
+            var passport = require('passport')
+            var LocalStrategy = require('passport-local').Strategy;
+            var session = require('express-session')
+            var flash = require('connect-flash')
+        
+ * 미들웨어 , strategy 설정
+    ~~~node 
+     app.use(passport.initialize())
+     app.use(passport.session())
+     app.use(flash())
+
+    ~~~
+
+* 패스 포트 세팅 
+~~~node
+
+ passport.use('local-join' , new LocalStrategy({
+     usernameField : 'email',
+     passwordField : 'pw',
+     passReqToCallback:true 
+ }, function(req,email,pw){
+     console.log('local-join callbakc called')
+ }
+ ));
+
+~~~

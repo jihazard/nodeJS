@@ -18,6 +18,13 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 app.set(`view engine`, `ejs`)
 app.use(cors())
+
+app.use(session({
+    secret:'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+}))
+
 app.use(router)
 //URL루트 설정하기
 
