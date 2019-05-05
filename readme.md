@@ -306,7 +306,7 @@ Access-Control-Allow-Origin
             var flash = require('connect-flash')
         
  * 미들웨어 , strategy 설정
-    ~~~node 
+    ~~~node
      app.use(passport.initialize())
      app.use(passport.session())
      app.use(flash())
@@ -319,7 +319,7 @@ Access-Control-Allow-Origin
  passport.use('local-join' , new LocalStrategy({
      usernameField : 'email',
      passwordField : 'pw',
-     passReqToCallback:true 
+     passReqToCallback:true
  }, function(req,email,pw){
      console.log('local-join callbakc called')
     //DB에서 인증 처리가 이루어져야 하는 부분
@@ -345,7 +345,7 @@ Access-Control-Allow-Origin
  passport.use('local-join' , new LocalStrategy({
      usernameField : 'email',
      passwordField : 'pw',
-     passReqToCallback:true 
+     passReqToCallback:true
  }, function(req,email,pw,done){
      console.log('local-join callbakc called' + req)
      console.log(email)
@@ -368,7 +368,7 @@ Access-Control-Allow-Origin
  ));
 ~~~
 
-* 위 로직에서 처리한 메시지 받기 
+* 위 로직에서 처리한 메시지 받기
 ~~~node
 router.get('/',function(req,res){
     //res.sendFile(path.join(__dirname,"../public/join.html"))
@@ -376,5 +376,38 @@ router.get('/',function(req,res){
     var errMsg = req.flash('error')
     if(errMsg) msg = errMsg
     res.render("join.ejs" ,{"message":msg})
+})
+~~~
+
+
+* 세션 값을 가져다 쓰기 위해 serilize 와 deserilize
+~~~node
+
+ passport.serializeUser(function(user,done){
+     console.log( 'passport session save : ' , user.email)
+     done(null,user.email)
+ })
+
+ passport.deserializeUser(function(email,done){
+    console.log( 'passport session deseirlaize : ' , email)
+    done(null,email)
+
+ })
+~~~
+
+* 컴스텀 콜백으로 passport 처리하기
+~~~node
+//Custom callback
+router.post("/",function(req,res,next){
+   
+    passport.authenticate('local-login',function(err,user,info){
+        if(err)res.status(500).json(err)
+        if(!user)return res.status(401).json(info.message);
+
+        req.logIn(user, function(err){
+            if(err) {return next(err)}
+            return res.json(user);
+        })
+    }) (req,res,next);
 })
 ~~~
